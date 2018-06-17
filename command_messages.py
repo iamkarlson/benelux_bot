@@ -1,5 +1,10 @@
+import re
+
+import telegram
+
 from base import Session
 from groups_messages_listener import GroupsMessagesListener
+
 
 def ruling(bot, update):
     update.message.reply_text(
@@ -110,11 +115,27 @@ def list_my_listeners(bot, update):
     user_data = session.query(GroupsMessagesListener).filter_by(username=user).first()
     text = str()
     for chat in user_data.listeners.keys():
-        text += "\nCHAT " + chat + ":\n"
+        text += "\n*CHAT " + chat + ":*\n"
         for listener in user_data.listeners[chat]:
             text += listener + "\n"
-    update.message.reply_text(text)
+    update.message.reply_text(text, parse_mode=telegram.ParseMode.MARKDOWN)
 
+
+def wordcloud(bot, update, args):
+    wordcloud_command_format = "command should be the next: /wordcloud NUMBER\n" \
+                               "where NUMBER between 1 and 9999"
+
+    if len(args) > 0:
+        messages_number = re.search("\d{1,4}", args[0])
+        print(args[0])
+        print(messages_number)
+        if len(args) > 1 or len(args[0]) > 4 or messages_number is None or int(messages_number.group(0)) == 0:
+            update.message.reply_text(wordcloud_command_format)
+        else:
+            messages_number = int(messages_number.group(0))
+            update.message.reply_text("wordcloud.img")
+    else:
+        update.message.reply_text(wordcloud_command_format)
 
 def apostil(bot, update):
     update.message.reply_text("""Про апостили ещё не написали. Сложная тема, знаете ли.""")
