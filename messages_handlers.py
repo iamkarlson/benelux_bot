@@ -3,6 +3,10 @@ from groups_messages_listener import GroupsMessagesListener
 
 
 def all_messages(bot, update):
+    check_message_by_listeners(bot, update)
+
+
+def check_message_by_listeners(bot, update):
     chat_name = update.message.chat.username
     session = Session()
     userdata = session.query(GroupsMessagesListener).all()
