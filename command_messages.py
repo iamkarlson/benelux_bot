@@ -127,13 +127,11 @@ def wordcloud(bot, update, args):
 
     if len(args) > 0:
         messages_number = re.search("\d{1,4}", args[0])
-        print(args[0])
-        print(messages_number)
         if len(args) > 1 or len(args[0]) > 4 or messages_number is None or int(messages_number.group(0)) == 0:
             update.message.reply_text(wordcloud_command_format)
         else:
             messages_number = int(messages_number.group(0))
-            update.message.reply_text("wordcloud.img")
+            update.message.reply_image("wordcloud.img")
     else:
         update.message.reply_text(wordcloud_command_format)
 
